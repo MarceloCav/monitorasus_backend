@@ -1,0 +1,9 @@
+FROM python:3.9
+
+WORKDIR /app
+
+COPY populatemongo_leitos.py .
+
+RUN pip install pandas pymongo pyarrow
+
+CMD ["python", "./populatemongo_leitos.py"]

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  django:
+    build:
+      context: .
+    container_name: django_app
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mongo
+    volumes:
+      - .:/code
+    environment:
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+      - MONGO_DB_NAME=mydatabase
+
+  populatemongo_internacoes:
+    build:
+      context: .
+      dockerfile: Dockerfile_internacoes
+    volumes:
+      - ./internacoes_rn.feather:/app/internacoes_rn.feather
+    command: "tail -f /dev/null"
+    stdin_open: true
+    tty: true
+
+  populatemongo_leitos:
+    build:
+      context: .
+      dockerfile: Dockerfile_leitos
+    volumes:
+      - ./leitos_rn.feather:/app/leitos_rn.feather
+    command: "tail -f /dev/null"
+    stdin_open: true
+    tty: true
+
+volumes:
+  mongo_data:

@@ -1,0 +1,9 @@
+FROM python:3.9
+
+WORKDIR /app
+
+COPY populatemongo_internacoes.py .
+
+RUN pip install pandas pymongo pyarrow
+
+CMD ["python", "./populatemongo_internacoes.py"]
